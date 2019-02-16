@@ -8,21 +8,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
+    <style>
+        .time-frame {
+            background-color: #000000;
+            color: #ffffff;
+            width: 300px;
+            font-family: Arial;
+        }
+
+        .time-frame>div {
+            width: 100%;
+            text-align: center;
+        }
+
+        #date-part {
+            font-size: 1.2em;
+        }
+
+        #time-part {
+            font-size: 2em;
+        }
+    </style>
 </head>
 
 <body>
     <div class="conteiner">
         <form class="text-center border border-light p-5">
+            <div class="h4 mb-4" id="date-part"></div>
+            <div class="h4 mb-4" id="time-part"></div>
             <p class="h4 mb-4">KMH to MS</p>
             <input type="number" name="kmh" id="kmh" class="form-control mb-4" placeholder="kmh"
                 onkeyup="convert('kmh')" onkeypress='validate(event)'>
-                <p class="h6 mb-4">=</p>
+            <p class="h6 mb-4">=</p>
             <input type="number" name="kmh" id="ms" class="form-control mb-4" placeholder="ms" onkeyup="convert('ms')"
                 onkeypress='validate(event)'>
         </form>
     </div>
 </body>
 <script>
+    $(document).ready(function () {
+        var interval = setInterval(function () {
+            var momentNow = moment();
+            $('#date-part').html(momentNow.format('YYYY MMMM DD') + ' '
+                + momentNow.format('dddd')
+                    .substring(0, 3).toUpperCase());
+            $('#time-part').html(momentNow.format('A hh:mm:ss'));
+        }, 100);
+
+        $('#stop-interval').on('click', function () {
+            clearInterval(interval);
+        });
+    });
     function convert(speed) {
         if (speed == 'kmh') {
             let s = (document.getElementById('kmh').value * 1000) / (3600)
